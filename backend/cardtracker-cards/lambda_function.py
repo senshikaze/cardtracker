@@ -4,6 +4,33 @@ import json
 dynamodb = boto3.client('dynamodb')
 
 
+def unmarshall(items):
+    """DynamoDB provides data in the following format
+        {
+            "name": {
+                "S": "string"
+            },
+            etc..
+        }
+        This method moves the value to something like:
+        {
+            "name": "string",
+            etc...
+        }
+        NOTE: makes alot of assumptions about the type (mostly, a string)
+        Also takes a list and tries to unmarshall the dicts in it
+    """
+    return_dict = {}
+    if isinstance(items, list):
+        return_list = []
+        for item in items:
+            return_list.append(unmarshall(item))
+        return return_list
+    for key, value in items.items():
+        return_dict[key] = list(value.values())[0]
+    return return_dict
+
+
 def lambda_handler(event, context):
     body = None
     status_code = 200
@@ -17,36 +44,41 @@ def lambda_handler(event, context):
     try:
         # handle DELETE event
         if route == "DELETE /cards/{id}":
-            dynamodb.delte_item(
+            dynamodb.delete_item(
                 TableName="cardtracker-cards",
-                Key={"id": event['pathParameters']['id']}
+                Key={"id": {"S": event['pathParameters']['id']}}
             )
             body = "Deleted"
         # handle GET event
         elif route == "GET /cards/{id}":
-            body = dynamodb.get_item(
+            item = dynamodb.get_item(
                 TableName="cardtracker-cards",
-                Key={"id": event['pathParameters']['id']}
+                Key={"id": {"S": event['pathParameters']['id']}}
             )
+            # unmarshall the body
+            body = unmarshall(item['Item'])
         # handle GET (list) event
         elif route == "GET /cards":
-            body = dynamodb.scan(TableName="cardtracker-cards")
+            items = dynamodb.scan(TableName="cardtracker-cards", Limit=30)
+            # unmarshall the body
+            body = unmarshall(items['Items'])
         # handle PUT event
         elif route == "PUT /cards":
-            requestJSON = json.loads(event.body)
+            requestJSON = json.loads(event['body'])
             # TODO validate data
             dynamodb.put_item(
                 TableName="cardtracker-cards",
                 Item={
-                    "id": requestJSON['id'],
-                    "name": requestJSON['name'],
-                    "team": requestJSON['team'],
-                    "position": requestJSON['position'],
-                    "manufacturer": requestJSON['manufacturer'],
-                    "year": requestJSON['year'],
-                    "tcdb": requestJSON['tcdb']
+                    "id": {"S": requestJSON['id']},
+                    "name": {"S": requestJSON['name']},
+                    "team": {"S": requestJSON['team']},
+                    "position": {"S": requestJSON['position']},
+                    "manufacturer": {"S": requestJSON['manufacturer']},
+                    "year": {"S": requestJSON['year']},
+                    "tcdb": {"S": requestJSON['tcdb']}
                 }
             )
+            body = "Added card"
         else:
             status_code = 404
             body = "Not found"
