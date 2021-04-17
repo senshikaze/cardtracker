@@ -7,4 +7,4 @@ A web-app to track trading cards
 * dynamo db
 
 ## Frontend 
-* mint from s3 bucket
+* svelte spa from s3 bucket
