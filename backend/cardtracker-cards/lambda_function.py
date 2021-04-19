@@ -35,7 +35,8 @@ def lambda_handler(event, context):
     body = None
     status_code = 200
     headers = {
-        'Content-Type': "application/json"
+        'Content-Type': "application/json",
+        'Access-Control-Allow-Origin': "*"
     }
 
     # build our route from the event data
@@ -59,9 +60,14 @@ def lambda_handler(event, context):
             body = unmarshall(item['Item'])
         # handle GET (list) event
         elif route == "GET /cards":
-            items = dynamodb.scan(TableName="cardtracker-cards", Limit=30)
+            limit = int(
+                event.get('queryStringParameters', {}).get('limit', 30)
+            )
+            items = dynamodb.scan(TableName="cardtracker-cards", Limit=limit)
             # unmarshall the body
             body = unmarshall(items['Items'])
+            if "LastEvaluatedKey" in items:
+                body['LastEvaluatedKey'] = items['LastEvaluatedKey']
         # handle PUT event
         elif route == "PUT /cards":
             requestJSON = json.loads(event['body'])

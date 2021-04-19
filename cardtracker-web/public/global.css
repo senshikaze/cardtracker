@@ -39,6 +39,10 @@ input, button, select, textarea {
 	border: 1px solid #ccc;
 	border-radius: 2px;
 }
+input[type=submit] {
+	display: block;
+	cursor: pointer;
+}
 
 input:disabled {
 	color: #ccc;
@@ -60,4 +64,16 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
+}
+
+.good {
+	color: rgb(11, 179, 36);
+}
+
+.error {
+	color: rgb(230, 59, 47);
+}
+
+.info {
+	color: rgb(174, 184, 38);
 }

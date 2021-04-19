@@ -1,30 +1,67 @@
 <script>
-	export let name;
+    import router from "page";
+    import { onMount } from "svelte";
+
+    import { get_cards } from "./services/cards.js";
+    import { getLoggedInUser } from "./services/cognito.js";
+
+    import Home from './Home.svelte';
+    import CardPage from './cards/CardPage.svelte';
+    import Login from './Login.svelte';
+
+    let showLogin = false;
+
+    let page;
+    router('/', () => page = Home);
+    router(
+        '/card/:id',
+        (ctx, next) => {params = ctx.params; next()},
+        () => page = CardPage
+    );
+
+    router.start();
+
+    onMount(async () => {
+        var user = getLoggedInUser();
+        if (!user) {
+            showLogin = true;
+        }
+        if (!showLogin){
+            await get_cards().then((response) => {
+                console.log(response);
+                if (response.error && response.error === "unauthorized") {
+                    showLogin = true;
+                }
+            });
+        }
+    });
+
+    const handleLogin = (event) => {
+        if (event.detail.success) {
+            showLogin = true;
+        }
+    };
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#if !showLogin}
+        <svelte:component this={page} />
+    {:else}
+        <Login on:message={handleLogin} />
+    {/if}
+
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+    main {
+        padding: 1em;
+        max-width: 240px;
+        margin: 0 auto;
+    }
 
 	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+        main {
+            max-width: none;
+        }
+    }
 </style>
