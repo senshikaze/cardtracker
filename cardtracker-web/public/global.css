@@ -12,6 +12,7 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+/* links */
 a {
 	color: rgb(0,100,200);
 	text-decoration: none;
@@ -25,6 +26,7 @@ a:visited {
 	color: rgb(0,80,160);
 }
 
+/* forms */
 label {
 	display: block;
 }
@@ -36,7 +38,7 @@ input, button, select, textarea {
 	padding: 0.4em;
 	margin: 0 0 0.5em 0;
 	box-sizing: border-box;
-	border: 1px solid #ccc;
+	border: 1px solid rgb(226, 226, 226);
 	border-radius: 2px;
 }
 input[type=submit] {
@@ -45,13 +47,15 @@ input[type=submit] {
 }
 
 input:disabled {
-	color: #ccc;
+	color: rgb(146, 145, 145);
 }
 
+/* buttons */
 button {
 	color: #333;
 	background-color: #f4f4f4;
 	outline: none;
+	cursor: pointer;
 }
 
 button:disabled {
@@ -66,14 +70,7 @@ button:focus {
 	border-color: #666;
 }
 
-.good {
-	color: rgb(11, 179, 36);
-}
-
-.error {
-	color: rgb(230, 59, 47);
-}
-
-.info {
-	color: rgb(174, 184, 38);
+/*classes*/
+.right {
+	float: right;
 }

@@ -2,9 +2,10 @@
     import router from "page";
     import { onMount } from "svelte";
 
-    import { get_cards } from "./services/cards.js";
     import { getLoggedInUser } from "./services/cognito.js";
 
+    import Header from './Header.svelte';
+    import Admin from './Admin.svelte';
     import Home from './Home.svelte';
     import CardPage from './cards/CardPage.svelte';
     import Login from './Login.svelte';
@@ -12,12 +13,15 @@
     let showLogin = false;
 
     let page;
+    let params;
     router('/', () => page = Home);
-    router(
-        '/card/:id',
-        (ctx, next) => {params = ctx.params; next()},
-        () => page = CardPage
-    );
+    router('/admin', () => page = Admin);
+    router('/admin/card/add', (ctx, next) => {
+        params = ctx.params
+        next()}, () => page = CardPage);
+    router('/admin/card/:id', (ctx, next) => {
+        params = ctx.params
+        next()}, () => page = CardPage);
 
     router.start();
 
@@ -26,28 +30,15 @@
         if (!user) {
             showLogin = true;
         }
-        if (!showLogin){
-            await get_cards().then((response) => {
-                console.log(response);
-                if (response.error && response.error === "unauthorized") {
-                    showLogin = true;
-                }
-            });
-        }
     });
-
-    const handleLogin = (event) => {
-        if (event.detail.success) {
-            showLogin = true;
-        }
-    };
 </script>
 
+<Header />
 <main>
 	{#if !showLogin}
-        <svelte:component this={page} />
+        <svelte:component this={page} params={params} />
     {:else}
-        <Login on:message={handleLogin} />
+        <Login />
     {/if}
 
 </main>

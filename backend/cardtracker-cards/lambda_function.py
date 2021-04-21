@@ -45,6 +45,13 @@ def lambda_handler(event, context):
     try:
         # handle DELETE event
         if route == "DELETE /cards/{id}":
+            if ('admin' not in event['requestContext']
+                    ['authorizer']['claims']['cognito:groups']):
+                return {
+                    'statusCode': 403,
+                    'headers': headers,
+                    'body': json.dumps("Not Allowed")
+                }
             dynamodb.delete_item(
                 TableName="cardtracker-cards",
                 Key={"id": {"S": event['pathParameters']['id']}}
@@ -60,9 +67,12 @@ def lambda_handler(event, context):
             body = unmarshall(item['Item'])
         # handle GET (list) event
         elif route == "GET /cards":
-            limit = int(
-                event.get('queryStringParameters', {}).get('limit', 30)
-            )
+            try:
+                limit = int(
+                    event.get('queryStringParameters', {}).get('limit', 30)
+                )
+            except AttributeError:
+                limit = 30
             items = dynamodb.scan(TableName="cardtracker-cards", Limit=limit)
             # unmarshall the body
             body = unmarshall(items['Items'])
@@ -70,6 +80,15 @@ def lambda_handler(event, context):
                 body['LastEvaluatedKey'] = items['LastEvaluatedKey']
         # handle PUT event
         elif route == "PUT /cards":
+            if ('cognito:groups' not in event['requestContext']
+                    ['authorizer']['claims'] or
+                    'admin' not in event['requestContext']
+                    ['authorizer']['claims']['cognito:groups']):
+                return {
+                    'statusCode': 403,
+                    'headers': headers,
+                    'body': json.dumps("Not Allowed")
+                }
             requestJSON = json.loads(event['body'])
             # TODO validate data
             dynamodb.put_item(

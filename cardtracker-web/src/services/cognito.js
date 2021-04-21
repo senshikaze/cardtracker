@@ -12,68 +12,28 @@ const poolData = {
     ClientId : "27kei534fja4jis9v57sl3p9h4"
 };
 
-function getUserPool() {
-    return new CognitoUserPool(poolData);
-}
-
-function getCognitoUser(email) {
-    return new CognitoUser({Username: email, Pool: getUserPool()});
+function decodeJWT(jwt) {
+    var raw_tokens = jwt.split(".");
+    return atob(raw_tokens[1]);
 }
 
 function getAuthenticationDetials(email, password) {
     return new AuthenticationDetails({Username: email, Password: password});
 }
 
-export function verify(email, code) {
-    return new Promise((resolve) => {
-        getCognitoUser(email).confirmRegistration(code, true, (err, result) => {
-            if (err) {
-                return resolve({ statusCode: 422, response: err });
-            }
-            return resolve({ statusCode: 400, response: result });
-        });
-    });
+function getCognitoUser(email) {
+    return new CognitoUser({Username: email, Pool: getUserPool()});
 }
 
-export function signIn(email, password) {
-    return new Promise((resolve) => {
-        var user = getCognitoUser(email)
-        user.authenticateUser(getAuthenticationDetials(email, password), {
-            onSuccess: (result) => {
-                const token = {
-                    accessToken: result.getAccessToken().getJwtToken(),
-                    idToken: result.getIdToken().getJwtToken(),
-                    refreshToken: result.getRefreshToken().getToken(),
-                };
-                return resolve({ statusCode: 200, response: token});
-            },
-            newPasswordRequired: (userAttr, requiredAttr) => {
-                delete userAttr.email_verified;
-                return resolve({ statusCode: 419, response: {user: user, userAttr: userAttr}});
-            },
-            onFailure: (err) => {
-                return resolve({ statusCode: 400, response: err.message || JSON.stringify(err)});
-            },
-        });
-    });
+function getUserPool() {
+    return new CognitoUserPool(poolData);
 }
 
-export function resetPassword(session, new_password, userAttr) {
-    return new Promise((resolve) => {
-        session.completeNewPasswordChallenge(new_password, userAttr, {
-            onSuccess: (result) => {
-                const token = {
-                    accessToken: result.getAccessToken().getJwtToken(),
-                    idToken: result.getIdToken().getJwtToken(),
-                    refreshToken: result.getRefreshToken().getToken(),
-                };
-                return resolve({statusCode: 200, response: token})
-            },
-            onFailure: (err) => {
-                return resolve({statusCode: 400, response: err.message || JSON.stringify(err)});
-            }
-        });
-    });
+// exports
+export function getAuthorizationHeaders() {
+    var user = getLoggedInUser();
+    var authSession = getSession(user);
+    return {'Authorization': `Bearer ${authSession.idToken.jwtToken}`};
 }
 
 export function getLoggedInUser() {
@@ -88,5 +48,108 @@ export function getSession(user){
             return;
         }
         return response;
+    });
+}
+
+export function isUserInGroup(group) {
+    var user = getLoggedInUser();
+    var found = false
+    if (!user) {
+        return false;
+    }
+    var session = getSession(user);
+    if (session.idToken.payload['cognito:groups']) {
+        session.idToken.payload['cognito:groups'].forEach((user_group) => {
+            if (user_group === group) {
+                found = true;
+            }
+        });
+    }
+    return found;
+}
+
+export function isUserValid() {
+    var user = getLoggedInUser();
+    return !(!user);
+}
+
+export function resetPassword(session, new_password, userAttr) {
+    return new Promise((resolve) => {
+        session.completeNewPasswordChallenge(new_password, userAttr, {
+            onSuccess: (result) => {
+                const token = {
+                    accessToken: result.getAccessToken().getJwtToken(),
+                    idToken: result.getIdToken().getJwtToken(),
+                    refreshToken: result.getRefreshToken().getToken(),
+                };
+                return resolve({
+                    statusCode: 200,
+                    response: token,
+                    message: "password reset success"
+                });
+            },
+            onFailure: (err) => {
+                return resolve({
+                    statusCode: 400,
+                    response: null,
+                    message: err.message || JSON.stringify(err)
+                });
+            }
+        });
+    });
+}
+
+export function signIn(email, password) {
+    return new Promise((resolve) => {
+        var user = getCognitoUser(email)
+        user.authenticateUser(getAuthenticationDetials(email, password), {
+            onSuccess: (result) => {
+                const token = {
+                    accessToken: result.getAccessToken().getJwtToken(),
+                    idToken: result.getIdToken().getJwtToken(),
+                    refreshToken: result.getRefreshToken().getToken(),
+                };
+                return resolve({
+                    statusCode: 200,
+                    response: token,
+                    message: "loggin success"
+                });
+            },
+            newPasswordRequired: (userAttr, requiredAttr) => {
+                delete userAttr.email_verified;
+                return resolve({
+                    statusCode: 419, 
+                    response: {user: user, userAttr: userAttr},
+                    message: "password reset required"
+                });
+            },
+            onFailure: (err) => {
+                return resolve({
+                    statusCode: 400,
+                    response: null,
+                    message: err.message || JSON.stringify(err)
+                });
+            },
+        });
+    });
+}
+
+export function signOutUser() {
+    var user = getLoggedInUser();
+    if (!user) {
+        // nothing to do
+        return;
+    }
+    user.signOut();
+}
+
+export function verify(email, code) {
+    return new Promise((resolve) => {
+        getCognitoUser(email).confirmRegistration(code, true, (err, result) => {
+            if (err) {
+                return resolve({ statusCode: 422, response: err });
+            }
+            return resolve({ statusCode: 400, response: result });
+        });
     });
 }
