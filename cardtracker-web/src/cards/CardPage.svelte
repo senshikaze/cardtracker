@@ -14,7 +14,7 @@
 
     $: setTimeout(_ => toast = null, 15000);
 
-    const handleSave = (event) => {
+    const handleSave = _ => {
         // TODO save card
         save_card(card).then((response) => {
             if (response.error) {
@@ -28,7 +28,7 @@
         })
     };
 
-    const handleDelete = (event) => {
+    const handleDelete = _ => {
         if (confirm('Are you sure? This will PERMANETLY DELETE THIS CARD!')) {
             delete_card(card.id).then((response) => {
                 if (response.error) {
@@ -51,7 +51,7 @@
                 id:  "", name: "",
                 position: "", team: "",
                 manufacturer: "", year: "",
-                tcdb: ""
+                series: "", tcdb: ""
             }
         }
     });
@@ -78,13 +78,3 @@
     {#if edit}<input id="delete" name="delete" type="submit" value="Delete" on:click="{handleDelete}" />{/if}
 </div>
 {/if}
-
-<style>
-    input {
-        width: 30%;
-    }
-    #delete {
-        background-color: rgb(167, 70, 70);
-        color: white;
-    }
-</style>

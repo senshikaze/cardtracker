@@ -17,7 +17,7 @@
 <div>
     <ul>
         {#each $cards as card}
-            <li><a href="/admin/card/{card.id}">{card.year} {card.manufacturer} {card.name}</a></li>
+            <li><a href="/admin/card/{card.id}">{card.year} {card.manufacturer} - {card.name}</a></li>
         {:else}
             <li>No Cards</li>
         {/each}

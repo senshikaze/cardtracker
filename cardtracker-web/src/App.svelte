@@ -8,6 +8,8 @@
     import Admin from './Admin.svelte';
     import Home from './Home.svelte';
     import CardPage from './cards/CardPage.svelte';
+    import CollectionList from './collection/CollectionList.svelte';
+    import CollectionCardPage from './collection/CollectionCardPage.svelte';
     import Login from './Login.svelte';
 
     let showLogin = false;
@@ -22,6 +24,13 @@
     router('/admin/card/:id', (ctx, next) => {
         params = ctx.params
         next()}, () => page = CardPage);
+    router('/collection', () => page = CollectionList);
+    router('/collection/add', (ctx, next) => {
+        params = ctx.params
+        next()},() => page = CollectionCardPage);
+    router('/collection/:id', (ctx, next) => {
+        params = ctx.params
+        next()}, () => page = CollectionCardPage);
 
     router.start();
 

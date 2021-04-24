@@ -5,7 +5,7 @@
     export let message;
 </script>
 
-<p class="{type}" transition:fade>{message}</p>
+{#if message}<p class="{type}" transition:fade>{message}</p>{/if}
 
 <style>
     /* color classes */

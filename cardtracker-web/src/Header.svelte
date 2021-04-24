@@ -3,6 +3,8 @@
 
     import {isUserInGroup, isUserValid, signOutUser} from './services/cognito.js';
 
+    let closed = true;
+
     const adminHandler = () => {
         router('/admin');
     };
@@ -15,7 +17,7 @@
 
 <header>
     <h1><a href="/">CardTracker</a></h1>
-    <span class="right">
+    <span class="right hamburger" class:closed>
         {#if isUserInGroup('admin')}<button on:click="{adminHandler}">Admin</button>{/if}
         {#if isUserValid()}<button on:click="{signOutHandler}">Sign Out</button>{/if}
     </span>
@@ -23,7 +25,7 @@
 
 <style>
     header {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid #ccc;
         margin: 0px;
         padding: 0px 16px;
     }
@@ -31,4 +33,15 @@
     header h1 {
         display: inline;
     }
+    @media only screen and (max-width: 600px) {
+        .hamburger {
+            background-image: url('/hamburger-1.png');
+            background-repeat: no-repeat;
+            width: 32px;
+            height: 32px;
+        }
+        .hamburger.closed * {
+            display: none;
+        }
+    } 
 </style>

@@ -100,6 +100,7 @@ def lambda_handler(event, context):
                     "position": {"S": requestJSON['position']},
                     "manufacturer": {"S": requestJSON['manufacturer']},
                     "year": {"S": requestJSON['year']},
+                    "series": {"S": requestJSON['series']},
                     "tcdb": {"S": requestJSON['tcdb']}
                 }
             )
