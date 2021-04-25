@@ -6,9 +6,9 @@ A web-app to track trading cards
 * aws account with deploy permissions to lamdba, api gateway, s3
 
 ## Backend
-* AWS gateway
-* AWS lambda
-* dynamo db
+* AWS gateway (must create from api spec)
+* AWS lambda (must create)
+* dynamo db (must create)
 * To Deploy:
 * * cd backend/ && ./deploy-backend.sh
 

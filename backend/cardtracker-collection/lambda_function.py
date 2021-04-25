@@ -96,7 +96,7 @@ def lambda_handler(event, context):
                 )
             body = {'Items': collection_with_cards}
             if "LastEvaluatedKey" in items:
-                body['LastEvaluatedKey'] = items['LastEvaluatedKey']
+                body['LastEvaluatedKey'] = items['LastEvaluatedKey']['id']['S']
         # handle put new card event
         elif route == "PUT /collection":
             newId = str(uuid.uuid4())
@@ -114,7 +114,7 @@ def lambda_handler(event, context):
                     "public": {"S": requestJSON['public']},
                     "variant": {"S": requestJSON['variant']},
                     "parrallel": {"S": requestJSON['parrallel']},
-                    "parrallerlnumber": {"S": requestJSON['parrallelnumber']},
+                    "parrallelnumber": {"S": requestJSON['parrallelnumber']},
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )
@@ -156,7 +156,7 @@ def lambda_handler(event, context):
                     "public": {"S": requestJSON['public']},
                     "variant": {"S": requestJSON['variant']},
                     "parrallel": {"S": requestJSON['parrallel']},
-                    "parrallerlnumber": {"S": requestJSON['parrallelnumber']},
+                    "parrallelnumber": {"S": requestJSON['parrallelnumber']},
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )

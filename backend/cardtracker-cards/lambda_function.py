@@ -78,7 +78,7 @@ def lambda_handler(event, context):
             # unmarshall the body
             body = {'Items': unmarshall(items['Items'])}
             if "LastEvaluatedKey" in items:
-                body['LastEvaluatedKey'] = items['LastEvaluatedKey']
+                body['LastEvaluatedKey'] = items['LastEvaluatedKey']['id']['S']
         # handle PUT event
         elif route == "PUT /cards":
             if ('cognito:groups' not in event['requestContext']
