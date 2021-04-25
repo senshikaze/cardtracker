@@ -1,7 +1,7 @@
 openapi: "3.0.1"
 info:
   title: "rest-cardtracker-cards"
-  version: "2021-04-23T15:36:29Z"
+  version: "2021-04-25T16:38:45Z"
 servers:
 - url: "https://75785a9hn9.execute-api.us-east-1.amazonaws.com/{basePath}"
   variables:
@@ -22,13 +22,6 @@ paths:
       responses:
         "200":
           description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-            Content-Type:
-              schema:
-                type: "string"
           content:
             application/json:
               schema:
@@ -36,6 +29,12 @@ paths:
       security:
       - cardtracker-userpools: []
     put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Card"
+        required: true
       responses:
         "200":
           description: "200 response"
@@ -85,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Cards"
+                $ref: "#/components/schemas/Card"
       security:
       - cardtracker-userpools: []
     delete:
@@ -140,7 +139,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Collection"
+                $ref: "#/components/schemas/CollectionCard"
       security:
       - cardtracker-userpools: []
     put:
@@ -154,7 +153,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Collection"
+              $ref: "#/components/schemas/CollectionCard"
         required: true
       responses:
         "200":
@@ -260,7 +259,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Collection"
+              $ref: "#/components/schemas/CollectionCard"
         required: true
       responses:
         "200":
@@ -306,6 +305,41 @@ components:
       title: "Collection"
       type: "object"
       properties:
+        Items:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+              account:
+                type: "string"
+              card:
+                type: "string"
+              count:
+                type: "string"
+              collected:
+                type: "string"
+              frontPath:
+                type: "string"
+              backPath:
+                type: "string"
+              public:
+                type: "boolean"
+              variant:
+                type: "string"
+              parrallel:
+                type: "string"
+              parrallelnumber:
+                type: "string"
+              added:
+                type: "string"
+        LastEvaluatedKey:
+          type: "string"
+    CollectionCard:
+      title: "Collection"
+      type: "object"
+      properties:
         id:
           type: "string"
         account:
@@ -320,14 +354,22 @@ components:
           type: "string"
         backPath:
           type: "string"
+        public:
+          type: "boolean"
+        variant:
+          type: "string"
+        parrallel:
+          type: "string"
+        parrallelnumber:
+          type: "string"
         added:
           type: "string"
     Image:
       title: "Image"
       type: "object"
       properties:
-        signedURL:
-          type: "string"
+        signedData:
+          type: "object"
         newURL:
           type: "string"
         side:
@@ -336,7 +378,40 @@ components:
       title: "Cards"
       type: "object"
       properties:
+        Items:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+              cardnumber:
+                type: "string"
+              name:
+                type: "string"
+              team:
+                type: "string"
+              position:
+                type: "string"
+              manufacturer:
+                type: "string"
+              year:
+                type: "string"
+              set:
+                type: "string"
+              series:
+                type: "string"
+              tcdb:
+                type: "string"
+        LastEvaluatedKey:
+          type: "string"
+    Card:
+      title: "Card"
+      type: "object"
+      properties:
         id:
+          type: "string"
+        cardnumber:
           type: "string"
         name:
           type: "string"
@@ -347,6 +422,10 @@ components:
         manufacturer:
           type: "string"
         year:
+          type: "string"
+        set:
+          type: "string"
+        series:
           type: "string"
         tcdb:
           type: "string"
