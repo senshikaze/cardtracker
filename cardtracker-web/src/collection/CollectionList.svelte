@@ -6,6 +6,7 @@
     import AddButton from '../utils/AddButton.svelte';
 
     let collection = [];
+    let lastEvaluatedKey;
     let toast;
     $: setTimeout(_ => toast = null, 30000);
 
@@ -15,7 +16,8 @@
                 toast = {type: "error", message: response.message};
                 return;
             }
-            collection = response;
+            collection = response.Items;
+            lastEvaluatedKey = response.LastEvaluatedKey ?? null;
         });
     });
 </script>
@@ -24,10 +26,11 @@
 <ul>
     <Toast {...toast} />
     {#each collection as collected}
-        <li><a href="/collection/{collected.id}">{collected.card.year} {collected.card.manufacturer} - {collected.card.name} ({collected.count})</a></li>
+        <li><a href="/collection/{collected.id}">{collected.card.year} {collected.card.manufacturer} {collected.card.set} - {collected.card.name} ({collected.count})</a></li>
     {:else}
         <li>No cards collected!</li>
     {/each}
+    {#if lastEvaluatedKey}<button>Load More TODO</button>{/if}
 </ul>
 
 <AddButton href="/collection/add" title="Add to collection" />

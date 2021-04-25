@@ -94,7 +94,7 @@ def lambda_handler(event, context):
                 collection_with_cards.append(
                     {**collect, **{'card': unmarshall(card['Item'])}}
                 )
-            body = collection_with_cards
+            body = {'Items': collection_with_cards}
             if "LastEvaluatedKey" in items:
                 body['LastEvaluatedKey'] = items['LastEvaluatedKey']
         # handle put new card event
@@ -112,6 +112,9 @@ def lambda_handler(event, context):
                     "fontPath": {"S": requestJSON['frontPath']},
                     "backPath": {"S": requestJSON['backPath']},
                     "public": {"S": requestJSON['public']},
+                    "variant": {"S": requestJSON['variant']},
+                    "parrallel": {"S": requestJSON['parrallel']},
+                    "parrallerlnumber": {"S": requestJSON['parrallelnumber']},
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )
@@ -151,6 +154,9 @@ def lambda_handler(event, context):
                     "frontPath": {"S": requestJSON['frontPath']},
                     "backPath": {"S": requestJSON['backPath']},
                     "public": {"S": requestJSON['public']},
+                    "variant": {"S": requestJSON['variant']},
+                    "parrallel": {"S": requestJSON['parrallel']},
+                    "parrallerlnumber": {"S": requestJSON['parrallelnumber']},
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )

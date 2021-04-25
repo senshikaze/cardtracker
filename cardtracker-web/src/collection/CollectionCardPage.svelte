@@ -9,7 +9,7 @@
         delete_collection_card,
     } from '../services/cards.js';
 
-    import CollectionCardItem from './CollectionCardItem.svelte';
+    import CollectionCardCardItem from './CollectionCardCardItem.svelte';
     import CollectionCardImage from './CollectionCardImage.svelte';
     import Toast from '../utils/Toast.svelte';
 
@@ -78,7 +78,7 @@
 {#if card}
 <div class="card_info">
     <label for="card"></label>
-    <CollectionCardItem loadedCard="{card.card}" on:message="{handleMessage}" />
+    <CollectionCardCardItem loadedCard="{card.card}" on:message="{handleMessage}" />
     <label for="count">Count</label>
     <input id="count" name="count" bind:value="{card.count}" type="number" />
     <label for="collected">Collected</label>

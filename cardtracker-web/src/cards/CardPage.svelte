@@ -51,7 +51,8 @@
                 id:  "", name: "",
                 position: "", team: "",
                 manufacturer: "", year: "",
-                series: "", tcdb: ""
+                series: "", set: "",
+                cardnumber: "", tcdb: ""
             }
         }
     });
@@ -62,19 +63,29 @@
     {#if toast}<Toast {...toast} />{/if}
     <label for="id">Card ID</label>
     <input id="id" name="id" bind:value="{card.id}" disabled={edit} />
+    <label for="cardnumber">Card Number</label>
+    <input id="cardnumber" name="cardnumber" bind:value="{card.cardnumber}" />
     <label for="name">Name</label>
     <input id="name" name="name" bind:value="{card.name}" />
     <label for="position">Position</label>
     <input id="position" name="position" bind:value="{card.position}" />
+    <label for="year">Year</label>
+    <input id="year" name="year" bind:value="{card.year}" />
     <label for="team">Team</label>
     <input id="team" name="team" bind:value="{card.team}" />
     <label for="manufacturer">Manufacturer</label>
     <input id="manufacturer" name="manufacturer" bind:value="{card.manufacturer}" />
-    <label for="year">Year</label>
-    <input id="year" name="year" bind:value="{card.year}" />
+    <label for="series">Series</label>
+    <input id="series" name="series" bind:value="{card.series}" />
     <label for="tcdb">TCDB Link</label>
     <input id="tcdb" name="tcdb" bind:value="{card.tcdb}" />
     <input id="save" name="save" type="submit" value="Save" on:click="{handleSave}" />
     {#if edit}<input id="delete" name="delete" type="submit" value="Delete" on:click="{handleDelete}" />{/if}
 </div>
 {/if}
+
+<style>
+    input {
+        width: 40%;
+    }
+</style>

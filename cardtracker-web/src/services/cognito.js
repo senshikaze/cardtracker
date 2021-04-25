@@ -12,11 +12,6 @@ const poolData = {
     ClientId : "27kei534fja4jis9v57sl3p9h4"
 };
 
-function decodeJWT(jwt) {
-    var raw_tokens = jwt.split(".");
-    return atob(raw_tokens[1]);
-}
-
 function getAuthenticationDetials(email, password) {
     return new AuthenticationDetails({Username: email, Password: password});
 }
@@ -38,6 +33,11 @@ export function getAuthorizationHeaders() {
 
 export function getLoggedInUser() {
     var user = getUserPool().getCurrentUser();
+    user.getUserAttributes((err, session) => {
+        if (err) {
+            console.log(`Error loading user: ${err.message}`)
+        }
+    }); //seems needed sometimes;
     return user;
 }
 

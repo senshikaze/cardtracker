@@ -1,5 +1,6 @@
 import boto3
 import json
+import traceback
 
 dynamodb = boto3.client('dynamodb')
 
@@ -75,7 +76,7 @@ def lambda_handler(event, context):
                 limit = 30
             items = dynamodb.scan(TableName="cardtracker-cards", Limit=limit)
             # unmarshall the body
-            body = unmarshall(items['Items'])
+            body = {'Items': unmarshall(items['Items'])}
             if "LastEvaluatedKey" in items:
                 body['LastEvaluatedKey'] = items['LastEvaluatedKey']
         # handle PUT event
@@ -101,6 +102,8 @@ def lambda_handler(event, context):
                     "manufacturer": {"S": requestJSON['manufacturer']},
                     "year": {"S": requestJSON['year']},
                     "series": {"S": requestJSON['series']},
+                    "set": {"S": requestJSON['set']},
+                    "cardnumber": {"S": requestJSON['cardnumber']},
                     "tcdb": {"S": requestJSON['tcdb']}
                 }
             )
@@ -110,7 +113,7 @@ def lambda_handler(event, context):
             body = "Not found"
     except Exception as err:
         status_code = 400
-        body = str(err)
+        body = f"{str(err)}: {traceback.print_tb(err.__traceback__)}"
     finally:
         body = json.dumps(body)
 
