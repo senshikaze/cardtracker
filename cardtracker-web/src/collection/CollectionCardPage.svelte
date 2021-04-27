@@ -83,11 +83,31 @@
     <input id="count" name="count" bind:value="{card.count}" type="number" />
     <label for="collected">Collected</label>
     <input id="collected" name="collected" bind:value="{card.collected}" type="date" />
-    <label for="public" class="checkbox_label">Make Public?</label><input id="public" type="checkbox" name="public" bind:value="{card.public}" />
+    <div class="checkbox_wrap">
+        <label for="variantcheck" class="checkbox_label">Variant?</label>
+        <input id="variantcheck" name="variantcheck" checked="{card.variant}" type="checkbox" on:click="{_ => card.variant = (!card.variant)?'VAR':""}"/>
+    </div>
+    {#if card.variant}
+        <input id="variant" name="variant" bind:value="{card.variant}" />
+    {/if}
+    <div class="checkbox_wrap">
+        <label for="parrallelcheck" class="checkbox_label">Parrallel?</label>
+        <input id="parrallelcheck" name="parrallelcheck" checked="{card.parrallel}" type="checkbox" on:click="{_ => card.parrallel = (!card.parrallel)?'<Parrallel>':""}"/>
+    </div>
+    {#if card.parrallel}
+        <label for="parrallel">Parrallel Type</label>
+        <input id="parrallel" name="parrallel" bind:value="{card.parrallel}" />
+        <label for="parrallelnumber">Parrallel Number</label>
+        <input id="parrallelnumber" name="parrallelnumber" bind:value="{card.parrallelnumber}" />
+    {/if}
+    <div class="checkbox_wrap">
+        <label for="public" class="checkbox_label">Make Public?</label>
+        <input id="public" type="checkbox" name="public" bind:value="{card.public}" />
+    </div>
+    <input type="submit" name="save" value="Save" on:click="{handleSave}" />
+    {#if edit}<input type="submit" name="delete" id="delete" value="Delete" on:click="{handleDelete}" />{/if}
 </div>
 <CollectionCardImage card="{card}" />
-<input type="submit" name="save" value="Save" on:click="{handleSave}" />
-{#if edit}<input type="submit" name="delete" id="delete" value="Delete" on:click="{handleDelete}" />{/if}
 {/if}
 
 <style>
@@ -103,12 +123,15 @@
         width: 100%;
     }
     .checkbox_label {
-        display: inline;
-        margin-right: 16px;
+        display: inline-block;
+        width: 30%;
     }
     input[type="checkbox"] {
         display: inline;
         width:auto;
+    }
+    input[name="save"] {
+        margin-top: 24px;
     }
     @media only screen and (max-width: 700px) {
         .card_info {

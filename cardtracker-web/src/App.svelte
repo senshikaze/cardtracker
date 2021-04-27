@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
 
     import { getLoggedInUser } from "./services/cognito.js";
+    import { load_cards_into_cache } from "./services/cards";
 
     import Header from './Header.svelte';
     import Admin from './Admin.svelte';
@@ -39,6 +40,7 @@
         if (!user) {
             showLogin = true;
         }
+        load_cards_into_cache();
     });
 </script>
 

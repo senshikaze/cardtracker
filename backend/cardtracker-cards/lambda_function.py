@@ -68,13 +68,22 @@ def lambda_handler(event, context):
             body = unmarshall(item['Item'])
         # handle GET (list) event
         elif route == "GET /cards":
-            try:
-                limit = int(
-                    event.get('queryStringParameters', {}).get('limit', 30)
+            params = {
+                'TableName': "cardtracker-cards",
+                'Limit': 30
+            }
+            lastEvaluatedKey = {}
+            if 'queryStringParameters' in event:
+                params['Limit'] = int(
+                    event['queryStringParameters'].get('limit', 30)
                 )
-            except AttributeError:
-                limit = 30
-            items = dynamodb.scan(TableName="cardtracker-cards", Limit=limit)
+                lastEvaluatedKey = event['queryStringParameters'].get(
+                    'LastEvaluatedKey', None
+                )
+            if lastEvaluatedKey:
+                params['ExclusiveStartKey'] = {"id": {'S': lastEvaluatedKey}}
+
+            items = dynamodb.scan(**params)
             # unmarshall the body
             body = {'Items': unmarshall(items['Items'])}
             if "LastEvaluatedKey" in items:
