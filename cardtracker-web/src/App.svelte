@@ -1,9 +1,11 @@
 <script>
-    import router from "page";
+    import router, { show } from "page";
     import { onMount } from "svelte";
 
     import { getLoggedInUser } from "./services/cognito.js";
     import { load_cards_into_cache } from "./services/cards";
+
+    import { userActive } from './stores.js';
 
     import Header from './Header.svelte';
     import Admin from './Admin.svelte';
@@ -35,12 +37,21 @@
 
     router.start();
 
+    $: {
+        if ($userActive) {
+            showLogin = false;
+            load_cards_into_cache();
+        } else {
+            showLogin = true;
+        }
+    }
     onMount(async () => {
         var user = getLoggedInUser();
         if (!user) {
-            showLogin = true;
+            $userActive = false;
+        } else {
+            $userActive = true;
         }
-        load_cards_into_cache();
     });
 </script>
 

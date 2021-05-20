@@ -3,6 +3,8 @@
 
     import {signIn, resetPassword} from './services/cognito.js';
 
+    import { userActive } from './stores.js';
+
     import Toast from './utils/Toast.svelte';
     let toast;
     $: setTimeout(_ => toast = null, 30000);
@@ -31,6 +33,7 @@
                 toast = {type: 'error', message: response.message}
                 return
             }
+            $userActive = true;
             router('/');
         });
     };
@@ -50,6 +53,7 @@
                 password_one = password_two = null;
                 return;
             }
+            $userActive = true;
             resetSession = password_one = password_two = null;
             passwordReset = false;
         });

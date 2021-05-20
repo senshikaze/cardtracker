@@ -33,6 +33,10 @@ export function getAuthorizationHeaders() {
 
 export function getLoggedInUser() {
     var user = getUserPool().getCurrentUser();
+    if (!user) {
+        console.log('No user, logged out?');
+        return null;
+    }
     user.getUserAttributes((err, session) => {
         if (err) {
             console.log(`Error loading user: ${err.message}`)

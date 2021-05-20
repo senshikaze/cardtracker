@@ -1,6 +1,8 @@
 <script>
     import router from 'page';
 
+    import { userActive } from './stores.js';
+
     import {isUserInGroup, isUserValid, signOutUser} from './services/cognito.js';
 
     let closed = true;
@@ -11,6 +13,7 @@
 
     const signOutHandler = () => {
         signOutUser();
+        $userActive = false;
         router('/');
     };
 </script>
@@ -18,8 +21,8 @@
 <header>
     <h1><a href="/">CardTracker</a></h1>
     <span class="right hamburger" class:closed>
-        {#if isUserInGroup('admin')}<button on:click="{adminHandler}">Admin</button>{/if}
-        {#if isUserValid()}<button on:click="{signOutHandler}">Sign Out</button>{/if}
+        {#if $userActive && isUserInGroup('admin')}<button on:click="{adminHandler}">Admin</button>{/if}
+        {#if $userActive}<button on:click="{signOutHandler}">Sign Out</button>{/if}
     </span>
 </header>
 

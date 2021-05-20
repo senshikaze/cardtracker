@@ -2,12 +2,21 @@
     import {onMount} from 'svelte';
 
     import {get_collection} from '../services/cards.js';
+    import CollectionSet from './CollectionSet.svelte'
     import Toast from '../utils/Toast.svelte';
     import AddButton from '../utils/AddButton.svelte';
+    import Tabs from '../utils/Tabs.svelte';
 
     let collection = [];
     let lastEvaluatedKey;
     let toast;
+    let tab = "collection";
+    let tabs = ["collection", "sets"];
+
+    const handleTabs = (event) => {
+        tab = event.detail.tab;
+    };
+    
     $: setTimeout(_ => toast = null, 30000);
 
     onMount(async () => {
@@ -22,6 +31,9 @@
     });
 </script>
 
+<Tabs tabs={tabs} setTab={tab} on:message="{handleTabs}" />
+
+{#if tab == "collection"}
 <h3>My Collection</h3>
 <ul>
     <Toast {...toast} />
@@ -32,6 +44,11 @@
     {/each}
     {#if lastEvaluatedKey}<button>Load More TODO</button>{/if}
 </ul>
+{/if}
+
+{#if tab == "sets"}
+<CollectionSet collection="{collection}" />
+{/if}
 
 <AddButton href="/collection/add" title="Add to collection" />
 
