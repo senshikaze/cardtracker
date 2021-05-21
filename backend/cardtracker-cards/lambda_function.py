@@ -112,6 +112,7 @@ def lambda_handler(event, context):
                     "year": {"S": requestJSON['year']},
                     "series": {"S": requestJSON['series']},
                     "set": {"S": requestJSON['set']},
+                    "subset": {"S": requestJSON['subset']},
                     "cardnumber": {"S": requestJSON['cardnumber']},
                     "tcdb": {"S": requestJSON['tcdb']}
                 }

@@ -2,6 +2,7 @@ import { get } from 'svelte/store';
 import {isUserValid, getAuthorizationHeaders} from './cognito.js';
 
 import {cards, sets} from '../stores.js';
+import {set_title} from './strings.js';
 
 const api_endpoint = "https://75785a9hn9.execute-api.us-east-1.amazonaws.com/default";
 
@@ -129,8 +130,8 @@ export const load_cards_into_cache = async (force=false) => {
     // make the sets
     let temp_sets = {};
     temp_cards.forEach((value, key) => {
-        temp_sets[`${value.year} ${value.set}`] = temp_sets[`${value.year} ${value.set}`] ?? [];
-        temp_sets[`${value.year} ${value.set}`].push(temp_cards[key]);
+        temp_sets[set_title(value)] = temp_sets[set_title(value)] ?? [];
+        temp_sets[set_title(value)].push(temp_cards[key]);
     });
 
     // sort sets

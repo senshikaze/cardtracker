@@ -9,7 +9,7 @@
 
 <style>
     #add-card {
-        position: absolute;
+        position: fixed;
         bottom: 24px;
         right: 24px;
         background-color: rgb(122, 173, 131);

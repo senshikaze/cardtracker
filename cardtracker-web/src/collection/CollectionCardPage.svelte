@@ -128,7 +128,6 @@
     }
     input[type="checkbox"] {
         display: inline;
-        width:auto;
     }
     input[name="save"] {
         margin-top: 24px;

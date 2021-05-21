@@ -2,33 +2,47 @@
     import {onMount} from 'svelte';
 
     import { sets } from '../stores.js';
+    import {card_title, set_title} from '../services/strings.js';
 
     export let collection;
-    let collectionSets = new Set();
+    let collectionBySet = new Object();
 
     onMount(async () => {
         // go over the sets of the cards we have
         // and create a map between the global sets
         // and our collection into collectionSets
-        collection.forEach((collected) => {
-            collectionSets.add(`${collected.card.year} ${collected.card.manufacturer} ${collected.card.set}`);
+        collection.forEach(collectedCard => {
+            collectionBySet[set_title(collectedCard.card)] = collectionBySet[set_title(collectedCard.card)] ?? [];
+            collectionBySet[set_title(collectedCard.card)].push(collectedCard);
         });
-        // sort by which set we have
     });    
 </script>
 
+
 <h3>My Sets</h3>
-{#each [...collectionSets] as cardSet}
-    <h4>{cardSet}</h4>
+{#each Object.keys(collectionBySet) as setNames}
+    <h4>{setNames}</h4>
     <ul>
-    {#each $sets[cardSet] as card}
-        <li>{card.name}</li>
+    {#each collectionBySet[setNames] as setcard}
+        <li>{card_title(setcard.card)}</li>
     {/each}
     </ul>
-{:else}
-    <p>what</p>
+{/each}
+
+
+<h3>All Sets</h3>
+{#each Object.keys($sets) as cardSet}
+    <h4>{cardSet}</h4>
+    <p>Cards:</p>
+    <ul>
+        {#each $sets[cardSet] as card}
+            <li>{card_title(card)}</li>
+        {/each}
+    </ul>
 {/each}
 
 <style>
-
+ ul li {
+     list-style: none;
+ }
 </style>

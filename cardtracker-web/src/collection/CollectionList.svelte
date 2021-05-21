@@ -8,10 +8,10 @@
     import Tabs from '../utils/Tabs.svelte';
 
     let collection = [];
-    let lastEvaluatedKey;
+    let lastEvaluatedKey = null;
     let toast;
-    let tab = "collection";
-    let tabs = ["collection", "sets"];
+    let tab = "list";
+    let tabs = ["list", "sets"];
 
     const handleTabs = (event) => {
         tab = event.detail.tab;
@@ -33,7 +33,7 @@
 
 <Tabs tabs={tabs} setTab={tab} on:message="{handleTabs}" />
 
-{#if tab == "collection"}
+{#if tab == "list"}
 <h3>My Collection</h3>
 <ul>
     <Toast {...toast} />
