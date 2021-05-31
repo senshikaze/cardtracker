@@ -10,6 +10,7 @@
         width: 175px;
         height: 50px;
         float: left;
+        margin: 8px;
     }
     .card:hover {
         background-color: rgb(240, 240, 250);

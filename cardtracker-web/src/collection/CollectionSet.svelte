@@ -2,7 +2,7 @@
     import {onMount} from 'svelte';
 
     import { sets } from '../stores.js';
-    import {card_title, set_title} from '../services/strings.js';
+    import {cardTitle, set_title} from '../services/strings.js';
 
     export let collection;
     let collectionBySet = new Object();
@@ -24,7 +24,7 @@
     <h4>{setNames}</h4>
     <ul>
     {#each collectionBySet[setNames] as setcard}
-        <li>{card_title(setcard.card)}</li>
+        <li>{cardTitle(setcard.card)}</li>
     {/each}
     </ul>
 {/each}
@@ -36,13 +36,7 @@
     <p>Cards:</p>
     <ul>
         {#each $sets[cardSet] as card}
-            <li>{card_title(card)}</li>
+            <li>{cardTitle(card)}</li>
         {/each}
     </ul>
 {/each}
-
-<style>
- ul li {
-     list-style: none;
- }
-</style>

@@ -111,10 +111,10 @@ def lambda_handler(event, context):
                     "collected": {"S": requestJSON['collected']},
                     "fontPath": {"S": requestJSON['frontPath']},
                     "backPath": {"S": requestJSON['backPath']},
-                    "public": {"S": requestJSON['public']},
+                    "public": {"BOOL": requestJSON['public']},
                     "variant": {"S": requestJSON['variant']},
-                    "parrallel": {"S": requestJSON['parrallel']},
-                    "parrallelnumber": {"S": requestJSON['parrallelnumber']},
+                    "parallel": {"S": requestJSON['parallel']},
+                    "parallelnumber": {"S": requestJSON['parallelnumber']},
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )
@@ -153,10 +153,10 @@ def lambda_handler(event, context):
                     "collected": {"S": requestJSON['collected']},
                     "frontPath": {"S": requestJSON['frontPath']},
                     "backPath": {"S": requestJSON['backPath']},
-                    "public": {"S": requestJSON['public']},
+                    "public": {"BOOL": requestJSON['public']},
                     "variant": {"S": requestJSON['variant']},
-                    "parrallel": {"S": requestJSON['parrallel']},
-                    "parrallelnumber": {"S": requestJSON['parrallelnumber']},
+                    "parallel": {"S": requestJSON['parallel']},
+                    "parallelnumber": {"S": requestJSON['parallelnumber']},
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )

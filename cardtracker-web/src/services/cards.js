@@ -92,7 +92,7 @@ export const load_cards_into_cache = async (force=false) => {
         return;
     }
     if ((window.localStorage['lastRefresh'] && 
-         window.localStorage.getItem('lastRefresh') > Date.now() - 86400) && !force) {
+         window.localStorage.getItem('lastRefresh') > Date.now() - 86400000) && !force) {
         // set stores from cache
         cards.set(JSON.parse(window.localStorage.getItem('cards')));
         sets.set(JSON.parse(window.localStorage.getItem('sets')));

@@ -4,6 +4,13 @@ html, body {
 	height: 100%;
 }
 
+/* reset */
+ul {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
 body {
 	color: #333;
 	margin: 0;

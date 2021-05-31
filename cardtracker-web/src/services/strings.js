@@ -1,5 +1,5 @@
 // Use common card title (Year Manufacturer - Name)
-export const card_title = (card) => {
+export const cardTitle = (card) => {
     return `${card.year} ${card.manufacturer} ${card.set}- ${card.name}`;
 };
 

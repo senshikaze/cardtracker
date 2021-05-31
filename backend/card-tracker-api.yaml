@@ -1,437 +1,428 @@
-openapi: "3.0.1"
+---
+swagger: "2.0"
 info:
+  version: "2021-05-31T21:21:03Z"
   title: "rest-cardtracker-cards"
-  version: "2021-04-25T16:38:45Z"
-servers:
-- url: "https://75785a9hn9.execute-api.us-east-1.amazonaws.com/{basePath}"
-  variables:
-    basePath:
-      default: "/default"
+host: "75785a9hn9.execute-api.us-east-1.amazonaws.com"
+basePath: "/default"
+schemes:
+- "https"
 paths:
   /cards:
     get:
+      produces:
+      - "application/json"
       parameters:
       - name: "start"
         in: "query"
-        schema:
-          type: "string"
+        required: false
+        type: "string"
       - name: "limit"
         in: "query"
-        schema:
-          type: "string"
+        required: false
+        type: "string"
       responses:
         "200":
           description: "200 response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Cards"
+          schema:
+            $ref: "#/definitions/Cards"
       security:
       - cardtracker-userpools: []
     put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Card"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Card"
         required: true
+        schema:
+          $ref: "#/definitions/Card"
       responses:
         "200":
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
           headers:
             Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
+              type: "string"
       security:
       - cardtracker-userpools: []
     options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       responses:
         "200":
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
           headers:
             Access-Control-Allow-Origin:
-              schema:
-                type: "string"
+              type: "string"
             Access-Control-Allow-Methods:
-              schema:
-                type: "string"
+              type: "string"
             Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
+              type: "string"
   /cards/{id}:
     get:
+      produces:
+      - "application/json"
       parameters:
       - name: "id"
         in: "path"
         required: true
-        schema:
-          type: "string"
+        type: "string"
       responses:
         "200":
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Card"
           headers:
             Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Card"
+              type: "string"
       security:
       - cardtracker-userpools: []
     delete:
+      produces:
+      - "application/json"
       parameters:
       - name: "id"
         in: "path"
         required: true
-        schema:
-          type: "string"
+        type: "string"
       responses:
         "200":
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
           headers:
             Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
+              type: "string"
       security:
       - cardtracker-userpools: []
     options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       responses:
         "200":
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
           headers:
             Access-Control-Allow-Origin:
-              schema:
-                type: "string"
+              type: "string"
             Access-Control-Allow-Methods:
-              schema:
-                type: "string"
+              type: "string"
             Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
-  /collection/{id}:
-    get:
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-      responses:
-        "200":
-          description: "200 response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CollectionCard"
-      security:
-      - cardtracker-userpools: []
-    put:
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CollectionCard"
-        required: true
-      responses:
-        "200":
-          description: "200 response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
-      security:
-      - cardtracker-userpools: []
-    delete:
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-      responses:
-        "200":
-          description: "200 response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
-      security:
-      - cardtracker-userpools: []
-    options:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-            Access-Control-Allow-Methods:
-              schema:
-                type: "string"
-            Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
-  /collection/{id}/images:
-    post:
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ImageRequest"
-        required: true
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Image"
-      security:
-      - cardtracker-userpools: []
-    options:
-      responses:
-        "200":
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: "string"
-            Access-Control-Allow-Methods:
-              schema:
-                type: "string"
-            Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
+              type: "string"
   /collection:
     get:
+      produces:
+      - "application/json"
       responses:
         "200":
           description: "200 response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Collection"
+          schema:
+            $ref: "#/definitions/Collection"
       security:
       - cardtracker-userpools: []
     put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CollectionCard"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "CollectionCard"
         required: true
+        schema:
+          $ref: "#/definitions/CollectionCard"
       responses:
         "200":
           description: "200 response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
+          schema:
+            $ref: "#/definitions/Empty"
       security:
       - cardtracker-userpools: []
     options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       responses:
         "200":
           description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
           headers:
             Access-Control-Allow-Origin:
-              schema:
-                type: "string"
+              type: "string"
             Access-Control-Allow-Methods:
-              schema:
-                type: "string"
+              type: "string"
             Access-Control-Allow-Headers:
-              schema:
-                type: "string"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Empty"
-components:
-  schemas:
-    Empty:
-      title: "Empty Schema"
-      type: "object"
-    ImageRequest:
-      title: "ImageRequest"
-      type: "object"
-      properties:
-        imageName:
-          type: "string"
-        side:
-          type: "string"
-    Collection:
-      title: "Collection"
-      type: "object"
-      properties:
-        Items:
-          type: "array"
-          items:
-            type: "object"
-            properties:
-              id:
-                type: "string"
-              account:
-                type: "string"
-              card:
-                type: "string"
-              count:
-                type: "string"
-              collected:
-                type: "string"
-              frontPath:
-                type: "string"
-              backPath:
-                type: "string"
-              public:
-                type: "boolean"
-              variant:
-                type: "string"
-              parrallel:
-                type: "string"
-              parrallelnumber:
-                type: "string"
-              added:
-                type: "string"
-        LastEvaluatedKey:
-          type: "string"
-    CollectionCard:
-      title: "Collection"
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        account:
-          type: "string"
-        card:
-          type: "string"
-        count:
-          type: "string"
-        collected:
-          type: "string"
-        frontPath:
-          type: "string"
-        backPath:
-          type: "string"
-        public:
-          type: "boolean"
-        variant:
-          type: "string"
-        parrallel:
-          type: "string"
-        parrallelnumber:
-          type: "string"
-        added:
-          type: "string"
-    Image:
-      title: "Image"
-      type: "object"
-      properties:
-        signedData:
+              type: "string"
+  /collection/{id}:
+    get:
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/CollectionCard"
+      security:
+      - cardtracker-userpools: []
+    put:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "CollectionCard"
+        required: true
+        schema:
+          $ref: "#/definitions/CollectionCard"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      security:
+      - cardtracker-userpools: []
+    delete:
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      security:
+      - cardtracker-userpools: []
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+  /collection/{id}/images:
+    post:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "ImageRequest"
+        required: true
+        schema:
+          $ref: "#/definitions/ImageRequest"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Image"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      security:
+      - cardtracker-userpools: []
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+securityDefinitions:
+  cardtracker-userpools:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    x-amazon-apigateway-authtype: "cognito_user_pools"
+definitions:
+  Empty:
+    type: "object"
+    title: "Empty Schema"
+  ImageRequest:
+    type: "object"
+    properties:
+      imageName:
+        type: "string"
+      side:
+        type: "string"
+    title: "ImageRequest"
+  Collection:
+    type: "object"
+    properties:
+      Items:
+        type: "array"
+        items:
           type: "object"
-        newURL:
-          type: "string"
-        side:
-          type: "string"
-    Cards:
-      title: "Cards"
-      type: "object"
-      properties:
-        Items:
-          type: "array"
-          items:
-            type: "object"
-            properties:
-              id:
-                type: "string"
-              cardnumber:
-                type: "string"
-              name:
-                type: "string"
-              team:
-                type: "string"
-              position:
-                type: "string"
-              manufacturer:
-                type: "string"
-              year:
-                type: "string"
-              set:
-                type: "string"
-              series:
-                type: "string"
-              tcdb:
-                type: "string"
-        LastEvaluatedKey:
-          type: "string"
-    Card:
-      title: "Card"
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        cardnumber:
-          type: "string"
-        name:
-          type: "string"
-        team:
-          type: "string"
-        position:
-          type: "string"
-        manufacturer:
-          type: "string"
-        year:
-          type: "string"
-        set:
-          type: "string"
-        series:
-          type: "string"
-        tcdb:
-          type: "string"
-  securitySchemes:
-    cardtracker-userpools:
-      type: "apiKey"
-      name: "Authorization"
-      in: "header"
-      x-amazon-apigateway-authtype: "cognito_user_pools"
+          properties:
+            id:
+              type: "string"
+            account:
+              type: "string"
+            card:
+              type: "string"
+            count:
+              type: "string"
+            collected:
+              type: "string"
+            frontPath:
+              type: "string"
+            backPath:
+              type: "string"
+            public:
+              type: "boolean"
+            variant:
+              type: "string"
+            parallel:
+              type: "string"
+            parallelnumber:
+              type: "string"
+            added:
+              type: "string"
+      LastEvaluatedKey:
+        type: "string"
+    title: "Collection"
+  CollectionCard:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      account:
+        type: "string"
+      card:
+        type: "string"
+      count:
+        type: "string"
+      collected:
+        type: "string"
+      frontPath:
+        type: "string"
+      backPath:
+        type: "string"
+      public:
+        type: "boolean"
+      variant:
+        type: "string"
+      parallel:
+        type: "string"
+      parallelnumber:
+        type: "string"
+      added:
+        type: "string"
+    title: "Collection"
+  Image:
+    type: "object"
+    properties:
+      signedData:
+        type: "object"
+        properties: {}
+      newURL:
+        type: "string"
+      side:
+        type: "string"
+    title: "Image"
+  Cards:
+    type: "object"
+    properties:
+      Items:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+            cardnumber:
+              type: "string"
+            name:
+              type: "string"
+            team:
+              type: "string"
+            position:
+              type: "string"
+            manufacturer:
+              type: "string"
+            year:
+              type: "string"
+            set:
+              type: "string"
+            series:
+              type: "string"
+            tcdb:
+              type: "string"
+      LastEvaluatedKey:
+        type: "string"
+    title: "Cards"
+  Card:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      cardnumber:
+        type: "string"
+      name:
+        type: "string"
+      team:
+        type: "string"
+      position:
+        type: "string"
+      manufacturer:
+        type: "string"
+      year:
+        type: "string"
+      set:
+        type: "string"
+      series:
+        type: "string"
+      tcdb:
+        type: "string"
+    title: "Card"

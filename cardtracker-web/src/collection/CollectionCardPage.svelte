@@ -66,19 +66,20 @@
             edit = false;
             card = {
                 id: "", account: "",
-                card: "", count: "",
+                card: null, count: "",
                 collected: "", frontPath: "",
-                backPath: "", added: "", public: false
+                backPath: "", added: "", variant: "", 
+                parallel: "", parallelnumber: "", public: false
             }
         }
     });
 </script>
 
 <Toast {...toast} />
+<a href='/collection' id="nav">&#60; Back</a>
 {#if card}
 <div class="card_info">
-    <label for="card"></label>
-    <CollectionCardCardItem loadedCard="{card.card}" on:message="{handleMessage}" />
+    <CollectionCardCardItem card="{card.card}" on:message="{handleMessage}" />
     <label for="count">Count</label>
     <input id="count" name="count" bind:value="{card.count}" type="number" />
     <label for="collected">Collected</label>
@@ -91,29 +92,35 @@
         <input id="variant" name="variant" bind:value="{card.variant}" />
     {/if}
     <div class="checkbox_wrap">
-        <label for="parrallelcheck" class="checkbox_label">Parrallel?</label>
-        <input id="parrallelcheck" name="parrallelcheck" checked="{card.parrallel}" type="checkbox" on:click="{_ => card.parrallel = (!card.parrallel)?'<Parrallel>':""}"/>
+        <label for="parallelcheck" class="checkbox_label">Parallel?</label>
+        <input id="parallelcheck" name="parallelcheck" checked={card.parallel} type="checkbox" on:click="{_ => card.parallel = (!card.parallel)?'<Parallel>':""}"/>
     </div>
-    {#if card.parrallel}
-        <label for="parrallel">Parrallel Type</label>
-        <input id="parrallel" name="parrallel" bind:value="{card.parrallel}" />
-        <label for="parrallelnumber">Parrallel Number</label>
-        <input id="parrallelnumber" name="parrallelnumber" bind:value="{card.parrallelnumber}" />
+    {#if card.parallel}
+        <label for="parallel">Parallel Type</label>
+        <input id="parallel" name="parallel" bind:value="{card.parallel}" />
+        <label for="parallelnumber">Parallel Number</label>
+        <input id="parallelnumber" name="parallelnumber" bind:value="{card.parallelnumber}" />
     {/if}
     <div class="checkbox_wrap">
         <label for="public" class="checkbox_label">Make Public?</label>
         <input id="public" type="checkbox" name="public" bind:value="{card.public}" />
     </div>
-    <input type="submit" name="save" value="Save" on:click="{handleSave}" />
-    {#if edit}<input type="submit" name="delete" id="delete" value="Delete" on:click="{handleDelete}" />{/if}
+    {#if card.id}
+        <CollectionCardImage card="{card}" />
+    {/if}
+    <input type="submit" name="save" value="Save" on:click="{handleSave}" disabled={card.card==null} />
+    {#if edit}<input type="submit" name="delete" id="delete" value="Delete" on:click="{handleDelete}" disabled={card.card==null} />{/if}
 </div>
-<CollectionCardImage card="{card}" />
 {/if}
 
 <style>
+    #nav {
+        display: block;
+        margin: 8px 0px;
+    }
     .card_info {
         float: left;
-        width: 30%;
+        width: 50%;
         min-width: 30%;
     }
     input {
@@ -131,6 +138,9 @@
     }
     input[name="save"] {
         margin-top: 24px;
+    }
+    input[type="submit"]:disabled {
+        cursor: not-allowed;
     }
     @media only screen and (max-width: 700px) {
         .card_info {

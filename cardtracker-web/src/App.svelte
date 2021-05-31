@@ -11,7 +11,7 @@
     import Admin from './Admin.svelte';
     import Home from './Home.svelte';
     import CardPage from './cards/CardPage.svelte';
-    import CollectionList from './collection/CollectionList.svelte';
+    import CollectionHome from './collection/CollectionHome.svelte';
     import CollectionCardPage from './collection/CollectionCardPage.svelte';
     import Login from './Login.svelte';
 
@@ -27,7 +27,7 @@
     router('/admin/card/:id', (ctx, next) => {
         params = ctx.params
         next()}, () => page = CardPage);
-    router('/collection', () => page = CollectionList);
+    router('/collection', () => page = CollectionHome);
     router('/collection/add', (ctx, next) => {
         params = ctx.params
         next()},() => page = CollectionCardPage);
@@ -62,19 +62,4 @@
     {:else}
         <Login />
     {/if}
-
 </main>
-
-<style>
-    main {
-        padding: 1em;
-        max-width: 240px;
-        margin: 0 auto;
-    }
-
-	@media (min-width: 640px) {
-        main {
-            max-width: none;
-        }
-    }
-</style>

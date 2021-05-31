@@ -22,7 +22,7 @@
 
 <style>
     ul {
-        list-style-type: none;
+        margin: 24px 0px;
     }
     ul li {
         display: inline;

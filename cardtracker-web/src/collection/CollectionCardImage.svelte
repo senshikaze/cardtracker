@@ -47,7 +47,7 @@
         <p>Front</p>
         {#if card.frontPath}<img src="{card.frontPath}" alt="{card.card.id} front" />{/if}
         <span class="image_button">
-            <input id="frontFile" type="file" bind:files="{frontImage}" />
+            <input id="frontFile" type="file" bind:files="{frontImage}" accept="image/*" capture="environment" />
             <label for="frontFile"><img src="/add_image.png" alt="Upload front of card" /></label>
         </span>
     </div>
@@ -55,7 +55,7 @@
         <p>Back</p>
         {#if card.backPath}<img src="{card.backPath}" alt="{card.card.id} back" />{/if}
         <span class="image_button">
-            <input id="backFile" type="file" bind:files="{backImage}" />
+            <input id="backFile" type="file" bind:files="{backImage}" accept="image/*" capture="environment" />
             <label for="backFile"><img src="/add_image.png" alt="Upload back of card" /></label>
         </span>
     </div>
@@ -64,7 +64,7 @@
 <style>
     .card_images { 
         float: left;
-        width: 60%;
+        width: 100%;
     }
 
     .image {
@@ -135,7 +135,7 @@
             cursor: pointer;
         }
         .image_button:active {
-        background-color: rgba(204, 204, 204, 0.8);
-    }
+            background-color: rgba(204, 204, 204, 0.8);
+        }
     }
 </style>
