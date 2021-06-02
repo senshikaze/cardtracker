@@ -178,7 +178,6 @@ def lambda_handler(event, context):
             signed_data = s3.generate_presigned_post(
                 Bucket=os.environ['S3_BUCKET'],
                 Key=key,
-                Conditions=[["stats-with", "$Content-Type", "image/"]],
                 ExpiresIn=300
             )
             new_url = f"{os.environ['S3_URL']}/{key}"

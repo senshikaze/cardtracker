@@ -23,7 +23,7 @@
         display: block;
         text-align: center;
         position: relative;
-        top: -13px;
+        top: -4px;
     }
     #add-card a:hover {
         text-decoration: none;

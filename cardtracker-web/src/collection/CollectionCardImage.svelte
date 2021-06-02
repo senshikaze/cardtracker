@@ -31,6 +31,10 @@
         if (image && files) {
             save_collection_image(card, image, files).then((response) => {
                 backImage = frontImage = null;
+                if(!response) {
+                    toast = {type: "error", message: "Could not upload photo!"};
+                    return;
+                }
                 if (response.error) {
                     toast = {type: "error", message: response.message};
                     return;
@@ -45,7 +49,7 @@
     <Toast {...toast} />
     <div class="image" title="Front of card">
         <p>Front</p>
-        {#if card.frontPath}<img src="{card.frontPath}" alt="{card.card.id} front" />{/if}
+        {#if card.frontPath}<img src="{card.frontPath}" alt="{card.card.id} front" crossorigin="anonymous" />{/if}
         <span class="image_button">
             <input id="frontFile" type="file" bind:files="{frontImage}" accept="image/*" capture="environment" />
             <label for="frontFile"><img src="/add_image.png" alt="Upload front of card" /></label>
@@ -53,7 +57,7 @@
     </div>
     <div class="image" title="Back of card">
         <p>Back</p>
-        {#if card.backPath}<img src="{card.backPath}" alt="{card.card.id} back" />{/if}
+        {#if card.backPath}<img src="{card.backPath}" alt="{card.card.id} back" crossorigin="anonymous" />{/if}
         <span class="image_button">
             <input id="backFile" type="file" bind:files="{backImage}" accept="image/*" capture="environment" />
             <label for="backFile"><img src="/add_image.png" alt="Upload back of card" /></label>

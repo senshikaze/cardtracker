@@ -38,9 +38,6 @@ export function getLoggedInUser() {
         return null;
     }
     user.getUserAttributes((err, session) => {
-        if (err) {
-            console.log(`Error loading user: ${err.message}`)
-        }
     }); //seems needed sometimes;
     return user;
 }
@@ -62,6 +59,9 @@ export function isUserInGroup(group) {
         return false;
     }
     var session = getSession(user);
+    if (!session) {
+        return false;
+    }
     if (session.idToken.payload['cognito:groups']) {
         session.idToken.payload['cognito:groups'].forEach((user_group) => {
             if (user_group === group) {

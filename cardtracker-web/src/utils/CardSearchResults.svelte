@@ -12,7 +12,7 @@
     };
 </script>
 
-{#if results}
+{#if results && results.length > 0}
 <ul id="searchResults">
     {#each results as result}
         <li on:click="{handleClick}" data-cardId={result.id}>{cardTitle(result)}</li>

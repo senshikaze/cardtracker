@@ -21,6 +21,9 @@
         padding-bottom: 8px;
         margin: 8px 0px;
     }
+    ul li a {
+        display: block;
+    }
     ul li:hover {
         background-color: #ddd;
     }

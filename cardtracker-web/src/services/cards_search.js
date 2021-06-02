@@ -9,11 +9,11 @@ import {cards} from '../stores.js';
 export const searchForCard = (query) => {
     let loadedCards = get(cards);
     // player names
-    let ids = loadedCards.filter(x => x.id.includes(query));
-    let players = loadedCards.filter(x => x.name.includes(query));
-    let teams = loadedCards.filter(x => x.team.includes(query));
-    let seriess = loadedCards.filter(x => x.series.includes(query));
-    let sets = loadedCards.filter(x => x.set.includes(query));
+    let ids = loadedCards.filter(x => x.id.toLowerCase().includes(query));
+    let players = loadedCards.filter(x => x.name.toLowerCase().includes(query));
+    let teams = loadedCards.filter(x => x.team.toLowerCase().includes(query));
+    let seriess = loadedCards.filter(x => x.series.toLowerCase().includes(query));
+    let sets = loadedCards.filter(x => x.set.toLowerCase().includes(query));
     // combine the cards as a set
     return new Set([...ids, ...players, ...teams, ...seriess, ...sets]);
 };

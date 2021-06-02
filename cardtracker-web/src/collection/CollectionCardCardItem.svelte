@@ -12,9 +12,9 @@
     const dispatch = createEventDispatcher();
 
     const searchFor = (event) => {
-        if (event.target.value.length > 3) {
+        if (event.target.value.length >= 3) {
             // we have 3 characters in the search, start searching
-            searchResults = [...searchForCard(event.target.value)];
+            searchResults = [...searchForCard(event.target.value.toLowerCase())];
         } else {
             searchResults = null;
         }

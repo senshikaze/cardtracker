@@ -35,12 +35,23 @@
 <Tabs tabs={tabs} setTab={tab} on:message="{handleTabs}" />
 <Toast {...toast} />
 
-{#if tab == "list"}
-<CollectionList collection="{collection}" />
-{/if}
+<div id="collectionCont">
+    {#if tab == "list"}
+    <CollectionList collection="{collection}" />
+    {/if}
 
-{#if tab == "sets"}
-<CollectionSet collection="{collection}" />
-{/if}
+    {#if tab == "sets"}
+    <CollectionSet collection="{collection}" />
+    {/if}
+</div>
 
 <AddButton href="/collection/add" title="Add to collection" />
+
+<style>
+    @media only screen and (min-width: 700px) {
+        #collectionCont {
+            width: 80%;
+            margin: 0px auto;
+        }
+    }
+</style>

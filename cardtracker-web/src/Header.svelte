@@ -36,7 +36,7 @@
     header h1 {
         display: inline;
     }
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 700px) {
         .hamburger {
             background-image: url('/hamburger-1.png');
             background-repeat: no-repeat;
