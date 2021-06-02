@@ -20,7 +20,8 @@
 
 <header>
     <h1><a href="/">CardTracker</a></h1>
-    <span class="right hamburger" class:closed>
+    <span class="right hamburger" on:click="{_ => closed = !closed}" />
+    <span id="actions" class:closed>
         {#if $userActive && isUserInGroup('admin')}<button on:click="{adminHandler}">Admin</button>{/if}
         {#if $userActive}<button on:click="{signOutHandler}">Sign Out</button>{/if}
     </span>
@@ -43,7 +44,15 @@
             width: 32px;
             height: 32px;
         }
-        .hamburger.closed * {
+        #actions {
+            display: block;
+            position: absolute;
+            right: 8px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 4px;
+        }
+        #actions.closed {
             display: none;
         }
     } 
