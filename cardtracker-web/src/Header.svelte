@@ -37,6 +37,9 @@
     header h1 {
         display: inline;
     }
+    #actions {
+        float: right;
+    }
     @media only screen and (max-width: 700px) {
         .hamburger {
             background-image: url('/hamburger-1.png');

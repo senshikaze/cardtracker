@@ -1,8 +1,8 @@
 import { get } from 'svelte/store';
 import {isUserValid, getAuthorizationHeaders} from './cognito.js';
 
-import {cards, sets} from '../stores.js';
-import {set_title} from './strings.js';
+import {cards, sets, collection} from '../stores.js';
+import {setTitle} from './strings.js';
 
 const api_endpoint = "https://75785a9hn9.execute-api.us-east-1.amazonaws.com/default";
 
@@ -120,8 +120,8 @@ export const load_cards_into_cache = async (force=false) => {
         return;
     }
     temp_cards.sort((a, b) => {
-        if (a.id == b.id) return 0;
-        return (a.id > b.id)? -1 : 1;
+        if (a.sortnumber == b.sortnumber) return 0;
+        return (a.sortnumber < b.sortnumber) ? -1 : 1;
     });
     cards.set(temp_cards);
     // save cards to local store
@@ -130,8 +130,8 @@ export const load_cards_into_cache = async (force=false) => {
     // make the sets
     let temp_sets = {};
     temp_cards.forEach((value, key) => {
-        temp_sets[set_title(value)] = temp_sets[set_title(value)] ?? [];
-        temp_sets[set_title(value)].push(temp_cards[key]);
+        temp_sets[setTitle(value)] = temp_sets[setTitle(value)] ?? [];
+        temp_sets[setTitle(value)].push(temp_cards[key]);
     });
 
     // sort sets
@@ -180,24 +180,24 @@ export const get_collection = async () => {
     if (!isUserValid()) {
         return {'error': 'unauthorized'};
     }
-    const request = new Request(`${api_endpoint}/collection`, {
-        method: 'GET',
-        headers: new Headers(getAuthorizationHeaders()),
-        mode: 'cors',
-        cache: 'default'
-    });
-    //TODO start is the key 
-    return fetch(request)
-        .then(async response => {
+    let lastEvaluatedKey = null;
+    do {
+        let query = (lastEvaluatedKey) ? `&LastEvaluatedKey=${lastEvaluatedKey}`:'';
+        await fetch(`${api_endpoint}/collection?limit=50${query}`, {
+            headers: new Headers(getAuthorizationHeaders())
+        }).then(async response => {
             if (!response.ok) {
                 if (response.status === 401) {
                     return {error: 'unauthorized'};
                 }
                 return {error: 'error from api', 'message': await response.json()};
             }
-            return response.json();
+            let retCollection = await response.json();
+            collection.update(x => [...x, ...retCollection.Items]);
+            lastEvaluatedKey = retCollection.LastEvaluatedKey ?? null;
         })
         .catch(err => console.log(err.message));
+    } while (lastEvaluatedKey);
 }
 
 //collection cards

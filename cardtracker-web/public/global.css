@@ -95,3 +95,6 @@ button:focus {
 .right {
 	float: right;
 }
+.hidden {
+	display: none;
+}

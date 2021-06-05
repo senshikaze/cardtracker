@@ -65,24 +65,32 @@ def lambda_handler(event, context):
                 return four_oh_four()
             dynamodb.delete_item(
                 TableName="cardtracker-collection",
-                Key={"id": {"S": event['pathParameters']['id']}}
+                Key={"id": {"S": collected_card['Item']['id']['S']}}
             )
             # TODO delete image as well from s3 bucket
-            body = "Deleted"
+            body = {'deleted': collected_card['Item']['id']['S']}
         # handle get collection event
         elif route == "GET /collection":
-            try:
-                limit = int(
-                    event.get('queryStringParameters', {}).get('limit', 30)
+            params = {
+                'TableName': "cardtracker-collection",
+                'FilterExpression': "account = :account",
+                'ExpressionAttributeValues': {":account": {"S": account}},
+                'Limit': 30
+            }
+            lastEvaluatedKey = {}
+            if 'queryStringParameters' in event \
+                    and event['queryStringParameters'] is not None:
+                params['Limit'] = int(
+                    event['queryStringParameters'].get('limit', 30)
                 )
-            except AttributeError:
-                limit = 30
-            items = dynamodb.scan(
-                TableName="cardtracker-collection",
-                FilterExpression="account = :account",
-                ExpressionAttributeValues={":account": {"S": account}},
-                Limit=limit
-            )
+                lastEvaluatedKey = event['queryStringParameters'].get(
+                    'LastEvaluatedKey', None
+                )
+            if lastEvaluatedKey:
+                params['ExclusiveStartKey'] = {"id": {'S': lastEvaluatedKey}}
+
+            items = dynamodb.scan(**params)
+
             collection = unmarshall(items['Items'])
             collection_with_cards = []
             for collect in collection:
@@ -118,7 +126,7 @@ def lambda_handler(event, context):
                     "added": {"S": str(datetime.datetime.now().timestamp())}
                 }
             )
-            body = "Added"
+            body = {"id": newId}
         # handle get specific card event
         elif route == "GET /collection/{id}":
             collected_card = dynamodb.get_item(

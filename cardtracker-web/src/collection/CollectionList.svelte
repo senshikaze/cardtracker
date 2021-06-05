@@ -1,19 +1,16 @@
 <script>
     import {cardTitle} from '../services/strings.js';
-
-    export let collection;
-    let lastEvaluatedKey;
+    import {collection} from '../stores.js';
 </script>
 
+<h3>My Collection - {$collection.length} cards</h3>
 <ul>
-    {#each collection as collected}
+    {#each $collection as collected}
         <li><a href="/collection/{collected.id}">{cardTitle(collected.card)} ({collected.count})</a></li>
     {:else}
         <li>No cards collected!</li>
     {/each}
-    {#if lastEvaluatedKey}<button>Load More TODO</button>{/if}
 </ul>
-
 
 <style>
     ul li {

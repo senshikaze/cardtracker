@@ -28,6 +28,7 @@ if __name__ == "__main__":
                     'manufacturer': str(row[6]),
                     'year': str(row[7]),
                     'set': str(row[8]),
-                    'tcdb': str(row[9])
+                    'tcdb': str(row[9]),
+                    'sortnumber': int(row[10])
                 }
             )

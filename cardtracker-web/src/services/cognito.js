@@ -48,6 +48,10 @@ export function getSession(user){
             console.log(err);
             return;
         }
+        if (!response) {
+            console.error(`getSession response was empty! ${response}`);
+            return;
+        }
         return response;
     });
 }

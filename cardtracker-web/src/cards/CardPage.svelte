@@ -52,7 +52,7 @@
                 position: "", team: "",
                 manufacturer: "", year: "",
                 series: "", set: "",
-                cardnumber: "", tcdb: ""
+                cardnumber: "", tcdb: "", sortnumber: 0
             }
         }
     });
@@ -79,6 +79,8 @@
     <input id="series" name="series" bind:value="{card.series}" />
     <label for="tcdb">TCDB Link</label>
     <input id="tcdb" name="tcdb" bind:value="{card.tcdb}" />
+    <label for="sortnumber">Sort Number</label>
+    <input id="sortnumber" name="sortnumber" bind:value="{card.sortnumber}" type="number" />
     <input id="save" name="save" type="submit" value="Save" on:click="{handleSave}" />
     {#if edit}<input id="delete" name="delete" type="submit" value="Delete" on:click="{handleDelete}" />{/if}
 </div>

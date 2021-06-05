@@ -3,9 +3,9 @@
     import { onMount } from "svelte";
 
     import { getLoggedInUser } from "./services/cognito.js";
-    import { load_cards_into_cache } from "./services/cards";
+    import { load_cards_into_cache, get_collection } from "./services/cards";
 
-    import { userActive } from './stores.js';
+    import { collection, userActive } from './stores.js';
 
     import Header from './Header.svelte';
     import Admin from './Admin.svelte';
@@ -41,6 +41,7 @@
         if ($userActive) {
             showLogin = false;
             load_cards_into_cache();
+            get_collection();
         } else {
             showLogin = true;
         }

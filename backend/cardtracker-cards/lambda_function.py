@@ -18,7 +18,6 @@ def unmarshall(items):
             "name": "string",
             etc...
         }
-        NOTE: makes alot of assumptions about the type (mostly, a string)
         Also takes a list and tries to unmarshall the dicts in it
     """
     return_dict = {}
@@ -29,6 +28,8 @@ def unmarshall(items):
         return return_list
     for key, value in items.items():
         return_dict[key] = list(value.values())[0]
+        if list(value.keys())[0] == "N":
+            return_dict[key] = int(return_dict[key])
     return return_dict
 
 
@@ -114,7 +115,8 @@ def lambda_handler(event, context):
                     "set": {"S": requestJSON['set']},
                     "subset": {"S": requestJSON['subset']},
                     "cardnumber": {"S": requestJSON['cardnumber']},
-                    "tcdb": {"S": requestJSON['tcdb']}
+                    "tcdb": {"S": requestJSON['tcdb']},
+                    "sortnumber": {"N": requestJSON['sortnumber']}
                 }
             )
             body = "Added card"

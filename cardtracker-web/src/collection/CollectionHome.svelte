@@ -1,53 +1,36 @@
 <script>
-    import {onMount} from 'svelte';
-
-    import {get_collection} from '../services/cards.js';
     import CollectionList from './CollectionList.svelte';
     import CollectionSet from './CollectionSet.svelte'
-    import Toast from '../utils/Toast.svelte';
     import AddButton from '../utils/AddButton.svelte';
     import Tabs from '../utils/Tabs.svelte';
 
-    let collection = [];
-    let lastEvaluatedKey = null;
-    let toast;
-    let tab = "list";
+    let tab = CollectionList;
+    let tabName = "list";
     let tabs = ["list", "sets"];
 
     const handleTabs = (event) => {
-        tab = event.detail.tab;
+        if (event.detail.tab === "sets") {
+            tab = CollectionSet;
+            tabName = "sets";
+        } else if (event.detail.tab === "list") {
+            tab = CollectionList;
+            tabName = "list";
+        }
     };
-    
-    $: setTimeout(_ => toast = null, 30000);
-
-    onMount(async () => {
-        get_collection().then((response) => {
-            if (response.error) {
-                toast = {type: "error", message: response.message};
-                return;
-            }
-            collection = response.Items;
-            lastEvaluatedKey = response.LastEvaluatedKey ?? null;
-        });
-    });
 </script>
 
-<Tabs tabs={tabs} setTab={tab} on:message="{handleTabs}" />
-<Toast {...toast} />
+<Tabs tabs={tabs} setTab={tabName} on:message="{handleTabs}" />
 
 <div id="collectionCont">
-    {#if tab == "list"}
-    <CollectionList collection="{collection}" />
-    {/if}
-
-    {#if tab == "sets"}
-    <CollectionSet collection="{collection}" />
-    {/if}
+    <svelte:component this={tab} />
 </div>
 
 <AddButton href="/collection/add" title="Add to collection" />
 
 <style>
+    #collectionCont {
+        overflow-y: auto;
+    }
     @media only screen and (min-width: 700px) {
         #collectionCont {
             width: 80%;
