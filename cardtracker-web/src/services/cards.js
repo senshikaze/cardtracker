@@ -177,13 +177,14 @@ export const save_card = async (card) => {
 
 //collection
 export const get_collection = async () => {
+    let loadedCards = get(cards);
     if (!isUserValid()) {
         return {'error': 'unauthorized'};
     }
     let lastEvaluatedKey = null;
     do {
         let query = (lastEvaluatedKey) ? `&LastEvaluatedKey=${lastEvaluatedKey}`:'';
-        await fetch(`${api_endpoint}/collection?limit=50${query}`, {
+        await fetch(`${api_endpoint}/collection?limit=100${query}`, {
             headers: new Headers(getAuthorizationHeaders())
         }).then(async response => {
             if (!response.ok) {
@@ -193,11 +194,20 @@ export const get_collection = async () => {
                 return {error: 'error from api', 'message': await response.json()};
             }
             let retCollection = await response.json();
+            // replace the cardId with the object
             collection.update(x => [...x, ...retCollection.Items]);
             lastEvaluatedKey = retCollection.LastEvaluatedKey ?? null;
         })
         .catch(err => console.log(err.message));
     } while (lastEvaluatedKey);
+
+    // load the cards into the object
+    let tempCollection = [];
+    get(collection).forEach((el) => {
+        el.card = loadedCards.filter(x => x.id == el.card)[0];
+        tempCollection.push(el);
+    });
+    collection.set(tempCollection);
 }
 
 //collection cards

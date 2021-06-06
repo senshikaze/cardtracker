@@ -3,6 +3,7 @@ import {
 	CognitoUserAttribute,
     AuthenticationDetails,
 	CognitoUser,
+    CognitoRefreshToken
 } from 'amazon-cognito-identity-js';
 
 const poolRegion = "us-east-1";
@@ -11,6 +12,15 @@ const poolData = {
     UserPoolId : "us-east-1_0Qe9L22av",
     ClientId : "27kei534fja4jis9v57sl3p9h4"
 };
+
+function refreshSession(user, session) {
+    user.refreshSession(session.RefreshToken, (err, session) => {
+        if (err) {
+            console.log(`Error refreshing token: ${err}`);
+        }
+        return session;
+    });
+}
 
 function getAuthenticationDetials(email, password) {
     return new AuthenticationDetails({Username: email, Password: password});
@@ -28,6 +38,9 @@ function getUserPool() {
 export function getAuthorizationHeaders() {
     var user = getLoggedInUser();
     var authSession = getSession(user);
+    if (!authSession.isValid()) {
+        authSession = refreshSession(user, authSession);
+    }
     return {'Authorization': `Bearer ${authSession.idToken.jwtToken}`};
 }
 
@@ -46,10 +59,6 @@ export function getSession(user){
     return user.getSession((err, response) => {
         if (err) {
             console.log(err);
-            return;
-        }
-        if (!response) {
-            console.error(`getSession response was empty! ${response}`);
             return;
         }
         return response;

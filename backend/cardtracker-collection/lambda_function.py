@@ -92,17 +92,8 @@ def lambda_handler(event, context):
             items = dynamodb.scan(**params)
 
             collection = unmarshall(items['Items'])
-            collection_with_cards = []
-            for collect in collection:
-                # get the card item
-                card = dynamodb.get_item(
-                    TableName="cardtracker-cards",
-                    Key={"id": {"S": collect['card']}}
-                )
-                collection_with_cards.append(
-                    {**collect, **{'card': unmarshall(card['Item'])}}
-                )
-            body = {'Items': collection_with_cards}
+
+            body = {'Items': collection}
             if "LastEvaluatedKey" in items:
                 body['LastEvaluatedKey'] = items['LastEvaluatedKey']['id']['S']
         # handle put new card event
